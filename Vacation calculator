@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Budget Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h2>Vacation Budget Calculator</h2>
+
+    <form method="post">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br><br>
+
+        <label for="destination">Destination:</label>
+        <select name="destination" id="destination" required>
+            <option value="Paris">Paris</option>
+            <option value="Tokyo">Tokyo</option>
+            <option value="London">London</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Seoul">Seoul</option>
+        </select><br><br>
+
+        <label for="NumOfTrav">Number of Travelers:</label>
+        <input type="number" name="NumOfTrav" min="1" required><br><br>
+
+        <label for="NumOfDays">Number of Days:</label>
+        <input type="number" name="NumOfDays" min="1" required> <br><br>
+
+        <label for="Accom">Accommodation type:</label>
+        <select name="Accom" id="Accom" required><br><br>
+            <option value="Budget">Budget</option>
+            <option value="Standard">Standard</option>
+            <option value="Luxury">Luxury</option>
+        </select>
+        <br><br>
+
+        <input type="submit" name="calculate" value="Calculate">
+    </form>
+
+    <?php
+    if (isset($_POST["calculate"])) {
+        $name = $_POST['name'];
+        $destination = $_POST['destination'];
+        $NumOfTrav = $_POST['NumOfTrav'];
+        $NumOfDays = $_POST['NumOfDays'];
+        $Accom = $_POST['Accom'];
+
+        //Define the cost for destination
+        $price = [
+            "Paris" => 500,
+            "Tokyo" => 800,
+            "London" => 600,
+            "Dubai" => 400,
+            "Seoul" => 700
+        ];
+
+        //Function to calculate accomodation type
+        function calculateAccomType($Accom) {
+            if ($Accom === 'Budget') {
+                $cost =  50;
+            } elseif ($Accom === 'Standard') {
+                $cost =  100;
+            } elseif ($Accom === 'Luxury') {
+                $cost =  200;
+            }           
+
+        return $cost;}
+
+        //Calculate the total Cost
+        function CalculateTotalCost($price, $destination, $NumOfTrav, $NumOfDays, $Accom) {
+            if (isset($price[$destination])) {
+                $cost = calculateAccomType($Accom);
+                $FlightCost = $price[$destination] * $NumOfTrav;
+                $DailyExpenses = 50 * $NumOfDays * $NumOfTrav;
+                $Accomodation = $cost * $NumOfDays * $NumOfTrav;
+
+
+
+                if ($NumOfTrav > 4) {
+                    $TotalCost = $FlightCost + $DailyExpenses + $Accomodation * 0.9 ; // 10% discount
+                }else {
+                    $TotalCost = $FlightCost + $DailyExpenses + $Accomodation ; 
+                    
+                }
+                return $TotalCost;
+                
+            }
+
+        }
+
+        //Calculate cost
+        $TotalCost = CalculateTotalCost($price, $destination, $NumOfTrav, $NumOfDays, $Accom);
+
+        //Display results
+        echo "<table>";
+        echo "<tr><th>Traveler Name</th><th>Destination</th><th>No. of Travelers </th><th>Days</th><th>Accomodations</th><th>Total Cost</th></tr>";
+        echo "<tr><td>$name</td><td>$destination</td><td>$NumOfTrav</td><td>$NumOfDays</td><td>$Accom</td><td>RM$TotalCost</td></tr>";
+        echo "</table>";
+
+    }
+    ?>
+
+    </body>
+    </html>
