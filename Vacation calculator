@@ -85,7 +85,7 @@
 
 
                 if ($NumOfTrav > 4) {
-                    $TotalCost = $FlightCost + $DailyExpenses + $Accomodation * 0.9 ; // 10% discount
+                    $TotalCost = ($FlightCost + $DailyExpenses + $Accomodation) * 0.9 ; // 10% discount
                 }else {
                     $TotalCost = $FlightCost + $DailyExpenses + $Accomodation ; 
                     
